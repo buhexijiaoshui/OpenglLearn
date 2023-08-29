@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\downloads\stb_image.h" />
+    <ClInclude Include="camera_h.h" />
     <ClInclude Include="shader_h.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
