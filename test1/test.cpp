@@ -193,12 +193,13 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-
         // 光照的物体
         ourShader.use();
-        ourShader.setVec3("light.position", lightPos);
+        ourShader.setVec3("light.position", camera.Position);
+        ourShader.setVec3("light.direction", camera.Front);
         ourShader.setVec3("viewPos", camera.Position);
-
+        ourShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+        ourShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
         ourShader.setFloat("material.shininess", 64.0f);
 
         //glm::vec3 lightColor = glm::vec3(1.0f);
