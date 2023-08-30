@@ -37,7 +37,7 @@ float yaw = 0, pitch = 0;
 //Camera camera(cameraPos, cameraUp, yaw, pitch);
 Camera camera(cameraPos);
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 1.0f, 0.0f);
 
 int main()
 {
@@ -152,12 +152,13 @@ int main()
     glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     unsigned int diffuseMap = loadTexture("resource/texture/container2.png");
+    unsigned int specularMap = loadTexture("resource/texture/lighting_maps_specular_color.png");
+    ourShader.use();
     ourShader.setInt("material.diffuse", 0);
-    unsigned int specularMap = loadTexture("resource/texture/container2_specular.png");
     ourShader.setInt("material.specular", 1);
 
     // render loop
@@ -177,14 +178,11 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, diffuseMap);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, specularMap);
+
 
         // 光照的物体
         ourShader.use();
-        ourShader.setVec3("lightPos", lightPos);
+        ourShader.setVec3("light.position", lightPos);
         ourShader.setVec3("viewPos", camera.Position);
 
         ourShader.setFloat("material.shininess", 64.0f);
@@ -209,6 +207,11 @@ int main()
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         ourShader.setMat4("projection", projection);
         ourShader.setMat4("view", view);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
