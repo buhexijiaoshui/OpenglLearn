@@ -196,7 +196,7 @@ int main()
 
         // 光照的物体
         ourShader.use();
-        ourShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
+        ourShader.setVec3("light.position", lightPos);
         ourShader.setVec3("viewPos", camera.Position);
 
         ourShader.setFloat("material.shininess", 64.0f);
@@ -212,6 +212,9 @@ int main()
         ourShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f); 
         ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
+        ourShader.setFloat("light.constant", 1.0f);
+        ourShader.setFloat("light.linear", 0.09f);
+        ourShader.setFloat("light.quadratic", 0.032f);
         //变换
         
 
@@ -242,13 +245,13 @@ int main()
         //光
         //lightPos.x = 1.0f + sin(glfwGetTime()) * 2.0f;
         //lightPos.y = sin(glfwGetTime() / 2.0f) * 1.0f;
-        //lightingShader.use();
-        //lightingShader.setMat4("projection", projection);
-        //lightingShader.setMat4("view", view);
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, lightPos);
-        //model = glm::scale(model, glm::vec3(0.2f));
-        //lightingShader.setMat4("model", model);
+        lightingShader.use();
+        lightingShader.setMat4("projection", projection);
+        lightingShader.setMat4("view", view);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f));
+        lightingShader.setMat4("model", model);
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
